@@ -99,13 +99,15 @@ class Paciente():
         self._img = img
     def setData(self,info):
         self._data.append(info)        
-    
+
+
+
 
 class Manejo_data(Paciente):
     def __init__(self):
-        super().__init__()   
-        
-    def cargar_archivos(ruta_pac, dicc1, dicc2, key, paciente):
+        super().__init__()  
+
+    def cargar(self,ruta_pac,dic1,dic2,llave,paciente):        
         carpeta = os.listdir(ruta_pac)
         for ruta_dicom in carpeta:
             if ruta_dicom.endswith('.dcm'): 
@@ -114,7 +116,7 @@ class Manejo_data(Paciente):
                 paciente.setData(dicom)
         data=paciente.getData()
         nombre = data[0].PatientName
-        ID = data[0].PatientID    
+        ID = data[0].PatientID          
     # edad = data[0].PatientAge    
         paciente.setNombre(nombre)
         paciente.setId(ID)
@@ -129,8 +131,10 @@ class Manejo_data(Paciente):
         ruta_imagen = os.path.join(output_nifti_file,archivos_nifti[0])
         imagen = nilearn.image.load_img(ruta_imagen)    
         paciente.setImg(imagen)                
-        dicc1[key] = paciente
-        dicc2[key] = data
+        dic1[llave] = paciente
+        dic2[llave] = data  
+        
+    
 
 def transformar_im(ID, umbral, tam_kernel, dic_data):
     """

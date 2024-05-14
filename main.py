@@ -11,16 +11,16 @@ def main():
                         \r3.Rotacion de imagen DICOM
                         \r4.Manipulacion de imagen JPG o PNG
                         \r5.Salir""")
-        opcion = int(input("Ingrese la opcion deseada"))
+        opcion = int(input("Ingrese la opcion deseada: "))
         if opcion == 1:
             pac = Paciente()
-            llave = input("Ingrese la llave con la que desea almacenar al paciente")
+            llave = input("Ingrese la llave con la que desea almacenar al paciente: ")
             ruta = input(r"Ingrese la ruta de la carpeta con los dicoms del paciente: ")
             sis.cargar_archivos(ruta,dic_pac,dic_data,llave,pac)
             print("Paciente ingresado correctamente")
             continue
         elif opcion == 2:
-            llave = input("Ingrese la llave con la que desea almacenar la imagen")
+            llave = input("Ingrese la llave con la que desea almacenar la imagen: ")
             ruta = input(r"Ingrese la ruta de la imagen que desea guardar: ")            
             ingre_imag(dic_data,ruta,llave)
             print("Imagen guardada")
