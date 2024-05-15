@@ -20,8 +20,9 @@ def ingre_imag(dicc,ruta,llave):
     imagen = cv2.imread(ruta)
     dicc[llave]=imagen
 
-def nombre_imgr(carpeta):
-    carpeta = r'C:\Users\alotu\Desktop\Escritorio\udea\programacion\informatica 2\Unidad 3\quiz 3\3_KarenAgudelo_AlejandroLoturco-1\img_r'
+def nombre_imgr(carpeta = os.getcwd()):
+    carpeta_nombre = 'img_r'
+    carpeta = os.path.join(carpeta,carpeta_nombre)
     cont = 0
     for filename in os.listdir(carpeta):
         if filename.endswith('.JPG'):
@@ -33,14 +34,13 @@ def nombre_imgr(carpeta):
     return nombre_archivo
 
 
-def rotacion(ruta,llave,grados,dic_data):
+def rotacion(llave,grados,dic_data):
     if llave in dic_data:
-        dicoms = os.listdir(ruta)
-        ruta_new = os.path.join(ruta,dicoms[0])
-        print(dicoms)
-        ds = pydicom.dcmread(ruta_new)
+        dicoms = dic_data[llave]
+        print(f"Hay {len(dicoms)} imagenes relacionadas a la llave ingresada")
+        selec = int(input("Ingrese el numero de la imagen que desea rotar: "))-1
+        ds = dicoms[selec] 
         img = ds.pixel_array
-
         if grados not in [90,180,270]:
             print("Los grados de rotacion deben ser 90,180 o 270")
             return False 
@@ -60,9 +60,9 @@ def rotacion(ruta,llave,grados,dic_data):
         plt.axis('off')
         plt.show()
 
-        carpeta = r'C:\Users\alotu\Desktop\Escritorio\udea\programacion\informatica 2\Unidad 3\quiz 3\3_KarenAgudelo_AlejandroLoturco-1\img_r'
-        nombre_archivo = nombre_imgr(carpeta)
-        ruta_guardado = os.path.join(carpeta, nombre_archivo)
+        
+        nombre_archivo = nombre_imgr()        
+        ruta_guardado = os.path.join(os.getcwd(), f'img_r\{nombre_archivo}')
         cv2.imwrite(ruta_guardado, imagen_rotada)
         
         print(f'Imagen rotada guardada como: {nombre_archivo}')
@@ -120,8 +120,8 @@ class Manejo_data(Paciente):
     # edad = data[0].PatientAge    
         paciente.setNombre(nombre)
         paciente.setId(ID)
-    # paciente.setEdad(edad)        
-        nifti_directory = r'C:\Users\alotu\Desktop\Escritorio\udea\programacion\informatica 2\Unidad 3\quiz 3\3_KarenAgudelo_AlejandroLoturco\nifti'
+    # paciente.setEdad(edad)          
+        nifti_directory = os.path.join(os.getcwd(),'nifti')
         os.makedirs(nifti_directory, exist_ok=True) 
         nifti_name = nombre_nif(nifti_directory, 'nifti')
         output_nifti_file = os.path.join(nifti_directory, nifti_name) 
