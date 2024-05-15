@@ -116,11 +116,14 @@ class Manejo_data(Paciente):
                 paciente.setData(dicom)
         data=paciente.getData()
         nombre = data[0].PatientName
-        ID = data[0].PatientID          
-    # edad = data[0].PatientAge    
+        ID = data[0].PatientID    
+        try:
+            edad = data[0][ 0x0010 , 0x1010 ].value
+        except:
+            edad = 'No disponible' 
         paciente.setNombre(nombre)
-        paciente.setId(ID)
-    # paciente.setEdad(edad)          
+        paciente.setId(ID)        
+        paciente.setAge(edad)          
         nifti_directory = os.path.join(os.getcwd(),'nifti')
         os.makedirs(nifti_directory, exist_ok=True) 
         nifti_name = nombre_nif(nifti_directory, 'nifti')
