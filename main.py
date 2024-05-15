@@ -43,10 +43,9 @@ def main():
             continue
 
         elif opcion == 4:
-            llave = int(input("Ingrese la llave de la imagen JPG o PNG: "))
-            kernel = int(input("Ingrese el tamaño del kernel"))
-            umbral = input("Ingrese el umbral")
-            sis.trasformar_im(llave, umbral, kernel, dic_data)
+            llave = input("Ingrese la llave de la imagen JPG o PNG: ")
+            kernel = int(input("Ingrese el tamaño del kernel(entero): "))
+            sis.transformar_im(llave, kernel, dic_data)
             continue
 
         elif opcion == 5:

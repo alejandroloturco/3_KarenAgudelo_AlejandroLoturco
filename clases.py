@@ -133,41 +133,37 @@ class Manejo_data(Paciente):
         paciente.setImg(imagen)                
         dic1[llave] = paciente
         dic2[llave] = data  
-        
-    
 
-def transformar_im(ID, umbral, tam_kernel, dic_data):
-    """
-    Realiza binarización y transformación morfológica en una imagen PNG o JPG.
-    Inserta un texto en la imagen resultante.
-    """
-    if ID in dic_data:
-        archivo = dic_data[ID]
-        imagen = cv2.imread(archivo, cv2.IMREAD_GRAYSCALE)
-        _, binarizada = cv2.threshold(imagen, umbral, 255, cv2.THRESH_BINARY)
+    def transformar_im(self,llave,tam_kernel, dic_data):             
+        if llave in dic_data:
+            imagen = dic_data[llave]            
+            imagen1 = cv2.cvtColor(imagen, cv2.COLOR_BGR2GRAY)
+            umbral=np.mean(imagen1)
+            _, binarizada = cv2.threshold(imagen1, umbral, 255, cv2.THRESH_BINARY)
+            #fijamos kernel cuadrado de 1
+            kernel = np.ones((tam_kernel, tam_kernel), np.uint8)
+            #Usamos MORPH_CLOSE para primero dilatacion y luego erosion
+            morfologia = cv2.morphologyEx(binarizada, cv2.MORPH_CLOSE, kernel , iterations=1)
+            texto = f'Imagen binarizada'
+            morfologia = cv2.putText(morfologia, texto, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (220, 0, 0), 2)
+            #imagen original
+            plt.figure(figsize=(10, 5))
+            plt.subplot(1, 2, 1)
+            plt.imshow(imagen1, cmap='gray')
+            plt.title("Imagen original")
+            plt.axis('off')
+            #imagen binarizada
+            plt.subplot(1, 2, 2)
+            plt.imshow(morfologia, cmap='gray')
+            plt.title(f"Imagen binarizada Umbral: {umbral}, Tamaño Kernel: {tam_kernel}")
+            plt.axis('off')
+            plt.show()  
+            llave2 = input("Ingrese la nueva llave con la que guardara la imagen modificada: ")          
+            dic_data[llave2] = morfologia
+            print("Imagen guardad satisfactoriamente")
 
-        kernel = np.ones((tam_kernel, tam_kernel), np.uint8)
-        morfologia = cv2.morphologyEx(binarizada, cv2.MORPH_CLOSE, kernel)
-        texto = f'Imagen binarizada\nUmbral: {umbral}, Tamaño Kernel: {tam_kernel}'
-        cv2.putText(morfologia, texto, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
-
-        plt.figure(figsize=(10, 5))
-        plt.subplot(1, 2, 1)
-        plt.imshow(imagen, cmap='gray')
-        plt.title("Imagen original")
-        plt.axis('off')
-
-        plt.subplot(1, 2, 2)
-        plt.imshow(morfologia, cmap='gray')
-        plt.title("Imagen binarizada y morfológica")
-        plt.axis('off')
-        plt.show()
-
-        nueva_ruta = f'imagen_procesada_{ID}.png'
-        cv2.imwrite(nueva_ruta, morfologia)
-    else:
-        print(f'Error: No se encontró información para el ID {ID} en dic_data.')
-
+        else:
+            print(f'Error: No se encuentra informacion para la llave {llave} en dic_data.')
 
 
             
